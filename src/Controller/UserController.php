@@ -11,9 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UserController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/users', name: 'user_list')]
     public function list(UserRepository $userRepository): Response
     {
@@ -33,6 +41,12 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
+
+            $roles = ['ROLE_USER'];
+            if ($this->security->isGranted('ROLE_ADMIN') && $form->has('roles')) {
+                $roles = $form->get('roles')->getData();
+            }
+            $user->setRoles($roles);
 
             $em->persist($user);
             $em->flush();
@@ -55,8 +69,18 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($hashedPassword);
+            if ($form->get('password')->getData()) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $form->get('password')->getData());
+                $user->setPassword($hashedPassword);
+            }
+
+            if ($this->security->isGranted('ROLE_ADMIN') && $form->has('roles')) {
+                $roles = $form->get('roles')->getData();
+                if (!in_array('ROLE_USER', $roles)) {
+                    $roles[] = 'ROLE_USER';
+                }
+                $user->setRoles($roles);
+            }
 
             $em->flush();
 

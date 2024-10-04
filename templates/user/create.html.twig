@@ -18,24 +18,24 @@
                             {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.username) }}
                         </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.password.first, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.password.first, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.password.first) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.password.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.password.second, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.password.second) }}
-                        </div>
-
                         <div class="mb-3">
                             {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.email) }}
                         </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.password) }}
+                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="mb-3">
+                                {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.roles, {'attr': {'class': 'form-check'}}) }}
+                                {{ form_errors(form.roles) }}
+                            </div>
+                        {% endif %}
 
                         <div class="d-flex justify-content-center gap-2">
                             <button type="submit" class="btn btn-primary">Créer l'utilisateur</button>
