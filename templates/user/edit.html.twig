@@ -1,14 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block header_title %}<h1>Modifier <strong>{{ user.username }}</strong></h1>{% endblock %}
+{% block header_title %}{% endblock %}
 {% block header_img %}{% endblock %}
 
 {% block body %}
-    <div class="row">
-        {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
-        {{ form_widget(form) }}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card rounded">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2 class="mb-0">Modifier l'utilisateur {{ user.username }}</h2>
+                </div>
+                <div class="card-body rounded">
+                    {{ form_start(form, {'action': path('user_edit', {'id': user.id}), 'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.username, "Nom d'utilisateur", {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.username) }}
+                        </div>
 
-        <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.password) }}
+                        </div>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="mb-3">
+                                {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.roles, {'attr': {'class': 'form-check'}}) }}
+                                {{ form_errors(form.roles) }}
+                            </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
