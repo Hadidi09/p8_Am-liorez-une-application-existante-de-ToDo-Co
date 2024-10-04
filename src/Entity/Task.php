@@ -19,15 +19,19 @@ class Task
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank("Vous devez saisir un titre.")]
+    #[Assert\NotBlank(message: "Vous devez saisir un titre.")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank("Vous devez saisir du contenu.")]
+    #[Assert\NotBlank(message: "Vous devez saisir du contenu.")]
     private ?string $content = null;
 
     #[ORM\Column]
     private ?bool $isDone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -78,6 +82,18 @@ class Task
     public function setDone(bool $isDone): static
     {
         $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
