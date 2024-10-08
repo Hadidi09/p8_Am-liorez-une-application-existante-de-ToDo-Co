@@ -27,15 +27,18 @@
                     <p class="card-text">{{ task.content }}</p>
                 </div>
                 <div class="card-footer">
-                    <div class="btn-group" role="group" aria-label="Task actions">
-                        <button class="btn btn-outline-success btn-sm toggle-task-btn" 
+                    <div class="btn-group  gap-1" role="group" aria-label="Task actions">
+                        <button class="btn btn-success btn-sm rounded toggle-task-btn" 
                                 data-task-id="{{ task.id }}" 
                                 data-is-done="{{ task.isDone }}">
                             {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
                         </button>
-                        <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
-                            <button class="btn btn-outline-danger btn-sm">Supprimer</button>
-                        </form>
+                        {# <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post"> #}
+                            <button class="btn btn-danger rounded delete-task" 
+                                data-task-id="{{ task.id }}"
+                                data-token="{{ csrf_token('delete-task-' ~ task.id) }}">Supprimer
+                            </button>
+                        {# </form> #}
                     </div>
                 </div>
             </div>

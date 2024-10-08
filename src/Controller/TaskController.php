@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
+use App\Service\TaskService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -101,14 +102,23 @@ class TaskController extends AbstractController
     }
 
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete')]
-    public function deleteTask(Task $task, EntityManagerInterface $em): Response
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['POST'])]
+    public function deleteTask(Task $task, EntityManagerInterface $em, TaskService $taskService, Request $request): Response
     {
-        $em->remove($task);
-        $em->flush();
+        if (!$this->isCsrfTokenValid('delete-task-' . $task->getId(), $request->request->get('_token'))) {
+            return new JsonResponse(['success' => false, 'message' => 'Token CSRF invalide.'], 400);
+        }
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        if (!$taskService->canDelete($task, $this->getUser())) {
+            return new JsonResponse(['success' => false, 'message' => 'Vous n\'êtes pas autorisé à supprimer cette tâche.'], 403);
+        }
 
-        return $this->redirectToRoute('task_list');
+        try {
+            $em->remove($task);
+            $em->flush();
+            return new JsonResponse(['success' => true, 'message' => 'La tâche a bien été supprimée.']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false, 'message' => 'Une erreur est survenue lors de la suppression de la tâche.'], 500);
+        }
     }
 }
