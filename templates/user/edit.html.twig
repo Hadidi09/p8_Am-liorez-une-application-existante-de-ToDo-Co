@@ -22,7 +22,7 @@
                         <div class="mb-3">
                             {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.email) }}
+                           {{ form_errors(form.email, {'attr': {'class': 'invalid-feedback d-block'}}) }}
                         </div>
 
                         <div class="mb-3">
