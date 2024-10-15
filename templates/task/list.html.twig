@@ -12,7 +12,7 @@
             <div class="card h-100">
                 <div class="card-header">
                     <h4 class="card-title">
-                        <a href="{{ path('task_toggle', {'id' : task.id }) }}" class="">{{ task.title }}</a>
+                        <a href="{{ path('task_edit', {'id' : task.id }) }}" class="">{{ task.title }}</a>
                         <span class="badge float-end task-status-{{ task.id }} 
                             {% if task.isDone %}bg-success{% else %}bg-warning{% endif %}">
                             {% if task.isDone %}
