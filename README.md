@@ -1,5 +1,7 @@
 # P8 Améliorez une application existante de ToDo & Co
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e595f098b243b69506e1984109f0a2)](https://app.codacy.com/gh/Hadidi09/p8_Am-liorez-une-application-existante-de-ToDo-Co/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 1. Clonez le projet
 
    `git clone https://github.com/Hadidi09/p8_Am-liorez-une-application-existante-de-ToDo-Co.git`
